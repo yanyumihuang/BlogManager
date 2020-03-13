@@ -15,7 +15,7 @@ import java.io.IOException;
  */
 @Controller
 public class HelloWord {
-    @RequestMapping("/helloword")
+@RequestMapping
     public void hello(HttpServletResponse response) throws IOException {
         response.getWriter().print("helloword");
     }
