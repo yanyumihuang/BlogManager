@@ -19,9 +19,6 @@ spring:
     testOnBorrow: true
     testOnReturn: false
     filters: stat,wall,log4j
-#      # 打开PSCache，并且指定每个连接上PSCache的大小(对mysql无用)
-#      poolPreparedStatements: true
-#      maxPoolPreparedStatementPerConnectionSize: 20
-      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
-
-
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
