@@ -1,7 +1,7 @@
 package info.yymh.blogmanager.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * @author sikunliang
@@ -11,5 +11,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @Description 扩展springmvc功能
  */
 @Configuration
-public class MyMvcConfig implements WebMvcConfigurer {
+public class MyMvcConfig extends WebMvcConfigurerAdapter {
+   /* @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new PersipemissionInterceptor()).addPathPatterns("/**")
+                .excludePathPatterns("/index.html");
+    }*/
 }

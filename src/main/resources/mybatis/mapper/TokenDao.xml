@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.yymh.blogmanager.dao.TokenDao">
+    <select id="queryRole" parameterType="String" resultType="hashmap">
+            SELECT * from user where id=#{id}
+    </select>
+    <select id="queryRolePemission" resultType="string">
+        select r.rolePemission from user u, userrole r where
+        u.roles=r.role
+        <if test="id ==null and id==''">
+           and  r.role='unregistered'
+        </if>
+        <if test="id !=null and id!=''">
+            and u.id=#{id}
+        </if>
+    </select>
+</mapper>

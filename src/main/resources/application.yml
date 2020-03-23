@@ -18,7 +18,18 @@ spring:
     testWhileIdle: true
     testOnBorrow: true
     testOnReturn: false
-    filters: stat,wall,log4j
+    filters: wall,stat,slf4j
+logging:
+  level:
+    druid:
+      sql:
+        Statement: DEBUG
+  file:
+    name: blogmanager.log
 mybatis:
-  config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql

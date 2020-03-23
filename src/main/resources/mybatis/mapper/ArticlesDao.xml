@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.yymh.blogmanager.dao.ArticlesDao">
+    <select id="query" parameterType="String" resultType="hashmap">
+        SELECT
+            CONCAT(A.ID,'') ID,A.TITLE,A.AUTHOR,A.CREATEDATE,A.CATEGORY,A.INTRODUCTION,A.ADDRESS,
+            if(A.private=0,'否','是') PRIVATE
+                FROM ARTICLES A
+    </select>
+    <update id="update" parameterType="info.yymh.blogmanager.pojo.Articles">
+        UPDATE articles  A SET A.category=#{category},A.introduction=#{introduction},A.private=#{serret}
+        WHERE A.id=#{id}
+    </update>
+</mapper>
