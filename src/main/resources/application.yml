@@ -1,4 +1,6 @@
 spring:
+  aop:
+    auto: true
   datasource:
     username: root
     password: 123456789
@@ -33,3 +35,4 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
   params: count=countSql
+

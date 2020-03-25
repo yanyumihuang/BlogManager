@@ -19,7 +19,7 @@ public class TokenAction {
     public TokenAction(TokenService tokenService) {
         this.tokenService = tokenService;
     }
-    @RequestMapping("/generictoken")
+        @RequestMapping("/generictoken")
     @ResponseBody
     public String  genericToken(String id){
        String token= tokenService.genericToken(id);

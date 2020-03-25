@@ -11,4 +11,7 @@
         UPDATE articles  A SET A.category=#{category},A.introduction=#{introduction},A.private=#{serret}
         WHERE A.id=#{id}
     </update>
+    <select id="queryByCategory" resultType="integer">
+        select count(*) from articles where category=#{category};
+    </select>
 </mapper>

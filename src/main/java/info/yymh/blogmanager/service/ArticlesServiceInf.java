@@ -38,6 +38,7 @@ public class ArticlesServiceInf implements ArticlesService{
             List<HashMap<String,String>> articlesLists=articlesDao.query(articleStatue);
             PageInfo pageInfo=new PageInfo(articlesLists);
             result.setCode("200");
+            result.setStatue("1");
             result.setResultLists(articlesLists);
             result.setRows(articlesLists.size());
             result.setCount(String.valueOf(pageInfo.getTotal()));
@@ -60,16 +61,19 @@ public class ArticlesServiceInf implements ArticlesService{
         try {
             int num=articlesDao.update(articles);
             if (num>0){
+                resultBean.setStatue("1");
                 resultBean.setCode("200");
                 resultBean.setMessage("更新成功");
             }
             else{
-                resultBean.setCode("400");
+                resultBean.setCode("200");
                 resultBean.setMessage("没有要更新的数据");
+                resultBean.setStatue("0");
             }
         }
         catch (Exception e){
             resultBean.setCode("500");
+            resultBean.setStatue("0");
             resultBean.setMessage("更新失败，请稍后再试");
         }
         return resultBean;

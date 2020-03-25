@@ -1,10 +1,16 @@
 package info.yymh.blogmanager.interceptor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import info.yymh.blogmanager.utils.ResultBean;
+import info.yymh.blogmanager.utils.TokenUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * @author sikunliang
@@ -16,8 +22,41 @@ import javax.servlet.http.HttpServletResponse;
 public class PersipemissionInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //如果访问的是管理页面那么校验失败的话应该重定向到登陆页面，这个等登陆页面写好再完善
+        Logger logger= LoggerFactory.getLogger(getClass());
+        logger.info("进入token校验连接器");
+        String token=request.getHeader("token");
+        logger.info("开始进行校验");
+        if (token.isEmpty()){
+            ResultBean resultBean = new ResultBean();
+            resultBean.setCode("200");
+            resultBean.setStatue("0");
+            resultBean.setMessage("token校验不通过");
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(resultBean);
+            response.getWriter().print(json);
+            logger.info("token校验完成");
+            return false;
+        }
+        else {
+            Map<String,Object> map=TokenUtils.decodedJWT(token);
+            if (map.get("role")==""){
+                logger.info("token校验完成");
+                return true;
+            }
+            else {
+                ResultBean resultBean = new ResultBean();
+                resultBean.setCode("200");
+                resultBean.setStatue("0");
+                resultBean.setMessage("token校验不通过");
+                ObjectMapper mapper = new ObjectMapper();
+                String json = mapper.writeValueAsString(resultBean);
+                response.getWriter().print(json);
+                logger.info("token校验完成");
+                return TokenUtils.verifyJWT(token);
+            }
+        }
 
-        return true;
     }
 
     @Override

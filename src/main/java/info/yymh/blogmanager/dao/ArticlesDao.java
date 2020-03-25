@@ -21,6 +21,13 @@ public interface ArticlesDao {
      * @return java.lang.String
      */
     List<HashMap<String,String>> query(String articlesStatue);
+    /**
+     * 根据分类查询文章摘要列表
+     * @author sikunliang
+     * @date 2020/3/19
+     * @return java.lang.String
+     */
+    Integer queryByCategory(String category);
    /**
     * 更新文章摘要
     * @author sikunliang
