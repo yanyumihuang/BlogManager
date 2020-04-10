@@ -20,7 +20,7 @@ public interface ArticlesService {
      * @param []
      * @return info.yymh.blogmanager.utils.ResultBean
      */
-    ResultBean query(String pageNum);
+    ResultBean queryArticles(String pageNum,String token);
 
     /**
      * 更新文章摘要
@@ -29,5 +29,7 @@ public interface ArticlesService {
      * @param {articles}
      * @return info.yymh.blogmanager.utils.ResultBean
      */
-    ResultBean update(Articles articles);
+    ResultBean updateArticles(Articles articles);
+
+    ResultBean insertArticles(Articles articles);
 }

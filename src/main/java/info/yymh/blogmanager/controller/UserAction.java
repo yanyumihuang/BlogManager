@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author sikunliang
  * @Package info.yymh.blogmanager.controller
@@ -17,10 +19,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class UserAction {
     private UserService userService;
+
+    public UserAction(UserService userService) {
+        this.userService = userService;
+    }
+
     @RequestMapping("/login")
     @ResponseBody
-    public ResultBean login(@RequestParam String userName,@RequestParam String passWord){
-        ResultBean resultBean=userService.query(userName,passWord);
+    public ResultBean  login(@RequestParam String userName,@RequestParam String passWord, HttpServletRequest request){
+        String token=request.getHeader("token");
+       ResultBean resultBean=userService.query(userName,passWord,token);
         return  resultBean;
+    }
+    public String  forgetPwd(){
+
+        return null;
     }
 }

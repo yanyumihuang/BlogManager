@@ -6,12 +6,14 @@ import com.github.pagehelper.PageInfo;
 import info.yymh.blogmanager.dao.ArticlesDao;
 import info.yymh.blogmanager.pojo.Articles;
 import info.yymh.blogmanager.utils.ResultBean;
+import info.yymh.blogmanager.utils.TokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author sikunliang
@@ -27,15 +29,18 @@ public class ArticlesServiceInf implements ArticlesService{
     }
 
     @Override
-    public ResultBean query(String pageNum) {
+    public ResultBean queryArticles(String pageNum,String token) {
         ResultBean result=new ResultBean();
         Logger logger=LoggerFactory.getLogger(ArticlesServiceInf.class);
         logger.info("开始进行文章摘要查询");
-        //根据token判断是否展示私密文章
+        Map<String,Object> claim= TokenUtils.decodedJWT(token);
         String  articleStatue="0";
+        if (claim.get("role")=="admin"){
+            articleStatue="1";
+        }
         try {
             Page page= PageHelper.startPage(Integer.valueOf(pageNum),5,true);
-            List<HashMap<String,String>> articlesLists=articlesDao.query(articleStatue);
+            List<HashMap<String,String>> articlesLists=articlesDao.queryArticles(articleStatue);
             PageInfo pageInfo=new PageInfo(articlesLists);
             result.setCode("200");
             result.setStatue("1");
@@ -54,12 +59,12 @@ public class ArticlesServiceInf implements ArticlesService{
     }
 
     @Override
-    public ResultBean update(Articles articles) {
+    public ResultBean updateArticles(Articles articles) {
         ResultBean resultBean=new ResultBean();
         Logger logger=LoggerFactory.getLogger(getClass());
         logger.info("开始更新文章摘要");
         try {
-            int num=articlesDao.update(articles);
+            int num=articlesDao.updateArticles(articles);
             if (num>0){
                 resultBean.setStatue("1");
                 resultBean.setCode("200");
@@ -72,9 +77,37 @@ public class ArticlesServiceInf implements ArticlesService{
             }
         }
         catch (Exception e){
+            e.printStackTrace();
             resultBean.setCode("500");
             resultBean.setStatue("0");
             resultBean.setMessage("更新失败，请稍后再试");
+        }
+        return resultBean;
+    }
+
+    @Override
+    public ResultBean insertArticles(Articles articles) {
+        ResultBean resultBean=new ResultBean();
+        Logger logger=LoggerFactory.getLogger(getClass());
+        logger.info("开始更新文章摘要");
+        try {
+            int num=articlesDao.insertArticles(articles);
+            if (num>0){
+                resultBean.setStatue("1");
+                resultBean.setCode("200");
+                resultBean.setMessage("插入成功");
+            }
+            else{
+                resultBean.setCode("200");
+                resultBean.setMessage("插入失败");
+                resultBean.setStatue("0");
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            resultBean.setCode("500");
+            resultBean.setStatue("0");
+            resultBean.setMessage("插入失败，请稍后再试");
         }
         return resultBean;
     }

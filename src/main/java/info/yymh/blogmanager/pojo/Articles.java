@@ -16,7 +16,7 @@ public class Articles {
     private String address;
     private String createDate;
     private String modifyDate;
-    private boolean serret;
+    private String serret;
 
 
     public long getId() {
@@ -90,11 +90,11 @@ public class Articles {
         this.modifyDate = modifyDate;
     }
 
-    public boolean isSerret() {
+    public String isSerret() {
         return serret;
     }
 
-    public void setSerret(boolean serret) {
+    public void setSerret(String serret) {
         this.serret = serret;
     }
 }

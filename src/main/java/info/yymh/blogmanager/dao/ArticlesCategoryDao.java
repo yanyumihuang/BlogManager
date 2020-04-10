@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface ArticlesCategoryDao {
-    List<HashMap<String,String>> query();
-    Integer update(@Param("category") String category,@Param("id") String id);
-    Integer delete(String id);
+    List<HashMap<String,String>> queryCategory();
+    Integer updateCategory(@Param("category") String category,@Param("id") String id);
+    Integer deleteCategory(String id);
+    Integer insertCategory(String category);
 }

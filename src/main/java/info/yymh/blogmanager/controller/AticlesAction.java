@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author sikunliang
  * @Package info.yymh.blogmanager.controller
@@ -22,16 +24,24 @@ public class AticlesAction {
         this.articlesService = articlesService;
     }
 
-    @RequestMapping("/articlesquery")
+    @RequestMapping("/queryArticles")
     @ResponseBody
-    public ResultBean query(String token, String pageNum){
-        ResultBean articlesLists=articlesService.query(pageNum);
+    public ResultBean query(HttpServletRequest request, String pageNum){
+        String token=request.getHeader("token");
+        ResultBean articlesLists=articlesService.queryArticles(pageNum,token);
        return articlesLists;
     }
-    @RequestMapping("/articlesupdate")
+    @RequestMapping("/updateArticles")
     @ResponseBody
     public ResultBean update(Articles articles){
-        articlesService.update(articles);
-        return  null;
+        ResultBean resultBean=articlesService.updateArticles(articles);
+        return  resultBean;
     }
+    @RequestMapping("/insertArticles")
+    @ResponseBody
+    public ResultBean insert(Articles articles){
+        ResultBean resultBean=articlesService.insertArticles(articles);
+        return  resultBean;
+    }
+
 }

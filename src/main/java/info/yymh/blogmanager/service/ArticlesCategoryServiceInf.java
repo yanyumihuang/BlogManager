@@ -11,11 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ *文章分类service层
  * @author sikunliang
- * @Package info.yymh.blogmanager.service
- * @ClassName:
  * @date 2020/3/25
- * @Description
+ *
  */
 @Service
 public class ArticlesCategoryServiceInf implements ArticlesCategoryService {
@@ -27,11 +26,11 @@ public class ArticlesCategoryServiceInf implements ArticlesCategoryService {
     }
 
     @Override
-    public ResultBean query() {
+    public ResultBean queryCategory() {
         Logger logger= LoggerFactory.getLogger(getClass());
         logger.info("开始进行文章分类查询");
         ResultBean resultBean=new ResultBean();
-        List<HashMap<String,String>> result= articlesCategoryDao.query();
+        List<HashMap<String,String>> result= articlesCategoryDao.queryCategory();
         if (result.size()==0){
             resultBean.setCode("200");
             resultBean.setMessage("没有分类信息");
@@ -47,11 +46,11 @@ public class ArticlesCategoryServiceInf implements ArticlesCategoryService {
     }
 
     @Override
-    public ResultBean update(String categpry,String id) {
+    public ResultBean updateCategory(String category,String id) {
         Logger logger= LoggerFactory.getLogger(getClass());
         logger.info("开始进行文章分类更新");
         ResultBean resultBean=new ResultBean();
-        Integer result= articlesCategoryDao.update(id,categpry);
+        Integer result= articlesCategoryDao.updateCategory(id,category);
         if (result!=0) {
             resultBean.setCode("200");
             resultBean.setMessage("更新成功");
@@ -61,18 +60,18 @@ public class ArticlesCategoryServiceInf implements ArticlesCategoryService {
     }
 
     @Override
-    public ResultBean delete(String id,String category) {
+    public ResultBean deleteCategory(String id) {
         Logger logger= LoggerFactory.getLogger(getClass());
         logger.info("开始删除文章分类");
         ResultBean resultBean=new ResultBean();
-        Integer result=articlesDao.queryByCategory(category);
+        Integer result=articlesDao.queryByCategory(id);
         if (result>0){
             resultBean.setCode("200");
             resultBean.setStatue("0");
             resultBean.setMessage("删除失败，还有文章属于该分类");
         }
         else {
-            result = articlesCategoryDao.delete(id);
+            result = articlesCategoryDao.deleteCategory(id);
             if (result > 0) {
                 resultBean.setCode("200");
                 resultBean.setStatue("1");
@@ -80,6 +79,26 @@ public class ArticlesCategoryServiceInf implements ArticlesCategoryService {
             }
         }
         logger.info("文章分类删除完成");
+        return resultBean;
+    }
+
+    @Override
+    public ResultBean insertCategory(String category) {
+        Logger logger= LoggerFactory.getLogger(getClass());
+        logger.info("开始删除文章分类");
+        ResultBean resultBean=new ResultBean();
+        Integer result=articlesCategoryDao.insertCategory(category);
+        if (result==0){
+            resultBean.setCode("200");
+            resultBean.setStatue("0");
+            resultBean.setMessage("插入失败");
+        }
+        else {
+                resultBean.setCode("200");
+                resultBean.setStatue("1");
+                resultBean.setMessage("插入成功");
+        }
+        logger.info("文章分类增加完成");
         return resultBean;
     }
 }

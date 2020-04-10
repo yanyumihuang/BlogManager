@@ -3,7 +3,18 @@ package info.yymh.blogmanager.service;
 import info.yymh.blogmanager.utils.ResultBean;
 
 public interface ArticlesCategoryService {
-    ResultBean query();
-    ResultBean update(String id,String category);
-    ResultBean delete(String id,String category);
+    ResultBean queryCategory();
+
+    /**
+     * 更新文章分类
+     * @author sikunliang
+     * @date 2020/4/10
+     * @param category 分类
+     * @param id 分类id
+     * @return info.yymh.blogmanager.utils.ResultBean
+     */
+    ResultBean updateCategory(String id,String category);
+
+    ResultBean deleteCategory(String id);
+    ResultBean insertCategory(String category);
 }

@@ -45,6 +45,7 @@ public class TokenUtils {
                 .sign(algorithmHS);
         return  token;
     }
+    //校验通过后应该刷新过期时间
     public static boolean verifyJWT(String token) throws Exception{
         try {
             String key=generalKey();

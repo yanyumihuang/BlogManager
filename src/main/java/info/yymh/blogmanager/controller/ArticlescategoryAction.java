@@ -8,11 +8,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
+ * 文章分类action
  * @author sikunliang
- * @Package info.yymh.blogmanager.controller
- * @ClassName:
  * @date 2020/3/25
- * @Description 文章分类接口
  */
 @Controller
 public class ArticlescategoryAction {
@@ -21,22 +19,31 @@ public class ArticlescategoryAction {
     public ArticlescategoryAction(ArticlesCategoryService articlesCategoryService) {
         this.articlesCategoryService = articlesCategoryService;
     }
-    @RequestMapping("/categoryquery")
+
+    @RequestMapping("/queryCategory")
     @ResponseBody
-    public ResultBean categoryQuery(){
-       ResultBean resultBean=articlesCategoryService.query();
+    public ResultBean queryCategory(){
+       ResultBean resultBean=articlesCategoryService.queryCategory();
         return resultBean;
     }
-    @RequestMapping("/categoryupdate")
+
+    @RequestMapping("/updateCategory")
     @ResponseBody
-    public ResultBean categoryUpdate(@RequestParam String id,@RequestParam String category){
-        ResultBean resultBean=articlesCategoryService.update(id,category);
+    public ResultBean updateCategory(@RequestParam String id,@RequestParam String category){
+        ResultBean resultBean=articlesCategoryService.updateCategory(id,category);
         return  resultBean;
     }
-    @RequestMapping("/categorydelete")
+
+    @RequestMapping("/deleteCategory")
     @ResponseBody
-    public ResultBean categoryDelete(@RequestParam String id,@RequestParam String category){
-        ResultBean resultBean=articlesCategoryService.delete(id,category);
+    public ResultBean deleteCategory(@RequestParam String id){
+        ResultBean resultBean=articlesCategoryService.deleteCategory(id);
+        return  resultBean;
+    }
+    @RequestMapping("/insertCategory")
+    @ResponseBody
+    public ResultBean insertCategory(@RequestParam String category){
+        ResultBean resultBean=articlesCategoryService.insertCategory(category);
         return  resultBean;
     }
 }

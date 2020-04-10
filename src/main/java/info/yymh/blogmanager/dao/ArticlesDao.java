@@ -20,14 +20,14 @@ public interface ArticlesDao {
      * @date 2020/3/19
      * @return java.lang.String
      */
-    List<HashMap<String,String>> query(String articlesStatue);
+    List<HashMap<String,String>> queryArticles(String articlesStatue);
     /**
      * 根据分类查询文章摘要列表
      * @author sikunliang
      * @date 2020/3/19
      * @return java.lang.String
      */
-    Integer queryByCategory(String category);
+    Integer queryByCategory(String id);
    /**
     * 更新文章摘要
     * @author sikunliang
@@ -36,5 +36,6 @@ public interface ArticlesDao {
     * @return int
     * @Description
     */
-   int update (Articles articles);
+   int updateArticles (Articles articles);
+   int insertArticles (Articles articles);
 }
