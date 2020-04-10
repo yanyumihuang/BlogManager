@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.yymh.blogmanager.dao.UserDao">
+    <select id="query" parameterType="String"  resultType="info.yymh.blogmanager.pojo.User">
+        select * from user a  where a.name=#{userName} AND a.pwd=#{pwd}
+    </select>
+    <insert id="insert" parameterType="string" useGeneratedKeys="true" keyProperty="id">
+        insert into user (name, pwd, rege_time, roles) value (#{userName},#{pwd},sysdate(),'geneleRole')
+    </insert>
+    <select id="queryPre" resultType="hashmap" >
+        SELECT pemissionValue FROM pemission WHERE id IN
+        <foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <select id="queryNum" resultType="java.lang.String">
+        SELECT rolePemission FROM userrole WHERE role=#{role}
+    </select>
+</mapper>

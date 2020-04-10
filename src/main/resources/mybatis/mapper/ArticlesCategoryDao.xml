@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="info.yymh.blogmanager.dao.ArticlesCategoryDao">
-    <select id="query" parameterType="String" resultType="hashmap">
-            select category from articlescategory
+    <select id="queryCategory" parameterType="String" resultType="hashmap">
+            select concat( b.id) id,b.category,concat(count(a.category)) num from articlescategory b left join
+                  articles a on
+                b.id = a.category group by b.id;
     </select>
-    <update id="update" parameterType="string">
+    <update id="updateCategory" parameterType="string">
         update articlescategory set category=#{category} where id=#{id}
     </update>
-    <delete id="delete" parameterType="string">
+    <delete id="deleteCategory" parameterType="string">
         delete from articlescategory where id=#{id}
+    </delete>
+    <delete id="insertCategory" parameterType="string">
+        insert into articlescategory set category=#{category}
     </delete>
 </mapper>

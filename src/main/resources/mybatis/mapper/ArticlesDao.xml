@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="info.yymh.blogmanager.dao.ArticlesDao">
-    <select id="query" parameterType="String" resultType="hashmap">
+    <select id="queryArticles" parameterType="String" resultType="hashmap">
         SELECT
-            CONCAT(A.ID,'') ID,A.TITLE,A.AUTHOR,A.CREATEDATE,A.CATEGORY,A.INTRODUCTION,A.ADDRESS,
+           concat(A.ID) ID,A.TITLE,A.AUTHOR,A.CREATEDATE,B.CATEGORY,A.INTRODUCTION,A.ADDRESS,
             if(A.private=0,'否','是') PRIVATE
-                FROM ARTICLES A
+                FROM ARTICLES A left join articlescategory B on a.category=b.id
     </select>
-    <update id="update" parameterType="info.yymh.blogmanager.pojo.Articles">
-        UPDATE articles  A SET A.category=#{category},A.introduction=#{introduction},A.private=#{serret}
-        WHERE A.id=#{id}
+    <update id="updateArticles" parameterType="info.yymh.blogmanager.pojo.Articles">
+        UPDATE articles  A SET
+        <if test="category!=null ">A.category=#{category}</if>
+        <if test="introduction!=null ">A.introduction=#{introduction}</if>
+        <if test="serret!=null ">A.private=#{serret}</if>
+
+        WHERE id=#{id}
     </update>
     <select id="queryByCategory" resultType="integer">
-        select count(*) from articles where category=#{category};
+        select count(*) from articles where category=#{id};
     </select>
+    <delete id="insertArticles" parameterType="info.yymh.blogmanager.pojo.Articles">
+        insert into articles (title, author, category, introduction, address, createDate)  value
+        (#{title},'yanyumohuang',#{category},#{introduction},#{address},#{createDate})
+
+    </delete>
 </mapper>
