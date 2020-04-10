@@ -3,8 +3,20 @@
  * @date 2020/3/17
  * @Description 监听滚动操作，从而展示不同的导航条
  */
+let token = window.localStorage.getItem("token");
+let id = window.localStorage.getItem("id");
 $(document).ready(function () {
-    dataLoad()
+    if (token==null||token==="") {
+        createToken();
+    }
+    dataLoad();
+
+    const slp = new SimplePagination(1);
+    slp.init({
+        container: '.box',
+        maxShowBtnCount: 3
+    });
+    slp.gotoPage(1)
 });
 $(window).scroll(function () {
     let scrollTop = $(document).scrollTop();
@@ -17,24 +29,19 @@ $(window).scroll(function () {
 });
 
 function dataLoad() {
-    let token = window.localStorage.getItem("token");
-    let id = window.localStorage.getItem("id");
-    if (token==null) {
-        createToken();
-    }
-    let post_list = $(".post-list")
-    $.ajax("/articlesquery", {
+    let post_list = $(".post-list");
+    $.ajax("/queryArticles", {
             type: "get",
             data: {'pageNum': 1},
             headers: {
                 'token': token
             },
             success: function (data) {
-                if (data.code == 400) {
+                if (data.code === 400) {
                     createToken();
                     dataLoad();
                 } else {
-                    if (data.rows != 0) {
+                    if (data.rows !== 0) {
                         let result = data.resultLists;
                         let ininnerHtmlString = "";
                         console.log("标题" + result[0].TITLE)
@@ -45,14 +52,13 @@ function dataLoad() {
                                 "  <section class=\"meta\">\n" +
                                 "    <div class=\"meta\" id=\"header-meta\">\n" +
                                 "  <h2 class=\"title\">\n" +
-                                "    <a href=\"/2020/03/15/146/\">\n" +
+                                "    <a href=\"/html/articlesWelcome_to_use_CSDN-markdown_Editor_new.html\">\n" +
 
                                 result[i].TITLE +
                                 "    </a>\n" +
                                 "  </h2>\n" +
                                 "      <div class=\"new-meta-box\">\n" +
                                 "<div class=\"new-meta-item author\">\n" +
-                                "  <a href=\"https://www.bfdz.ink\" rel=\"nofollow\">\n" +
                                 "    <img src=\"https://www.bfdz.ink/favicon.ico\">\n" +
                                 "    <p>" +
                                 result[i].AUTHOR + "</p>\n" +
@@ -102,9 +108,12 @@ function dataLoad() {
     )
 }
 function  createToken() {
-    $.get("/generictoken",
-        {'id': id},
-        function (data) {
+
+    $.ajax("/generictoken",{
+        data:{'id': id},
+        async :false,
+        success:function (data) {
             window.localStorage.setItem("token", data)
-        })
+            token=data;
+        }})
 }
