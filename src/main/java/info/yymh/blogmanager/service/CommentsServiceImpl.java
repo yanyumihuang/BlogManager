@@ -24,10 +24,10 @@ import java.util.UUID;
  * @Description 文章评论功能
  */
 @Service
-public class CommentsServiceInf implements CommentsService {
+public class CommentsServiceImpl implements CommentsService {
     private UserDao userDao;
     private CommentsDao commentsDao;
-    public CommentsServiceInf(UserDao userDao, CommentsDao commentsDao) {
+    public CommentsServiceImpl(UserDao userDao, CommentsDao commentsDao) {
         this.userDao = userDao;
         this.commentsDao = commentsDao;
     }

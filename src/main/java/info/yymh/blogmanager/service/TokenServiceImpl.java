@@ -9,16 +9,13 @@ import java.util.UUID;
 
 /**
  * @author sikunliang
- * @Package info.yymh.blogmanager.service
- * @ClassName:
  * @date 2020/3/23
- * @Description
  */
 @Service
-public class TokenServiceInf implements TokenService {
+public class TokenServiceImpl implements TokenService {
     private TokenDao tokenDao;
 
-    public TokenServiceInf(TokenDao tokenDao) {
+    public TokenServiceImpl(TokenDao tokenDao) {
         this.tokenDao = tokenDao;
     }
 
@@ -26,8 +23,8 @@ public class TokenServiceInf implements TokenService {
     public String genericToken(String id) {
         UUID uuid=UUID.randomUUID();
         String uid=uuid.toString();
-        String token="";
-        if (id!=null&&id!="") {
+        String token;
+        if (id!=null&& !"".equals(id)) {
              Map<String,String> userInf = tokenDao.queryRole(id);
             token= TokenUtils.createToken(uid, userInf.get("roles"),userInf.get("id"),userInf.get("name"));
         }

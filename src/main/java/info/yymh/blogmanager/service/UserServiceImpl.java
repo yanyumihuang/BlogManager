@@ -12,16 +12,13 @@ import java.util.UUID;
 
 /**
  * @author sikunliang
- * @Package info.yymh.blogmanager.service
- * @ClassName:
  * @date 2020/3/25
- * @Description
  */
 @Service
-public class UserServiceInf implements UserService {
+public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
-    public UserServiceInf(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao) {
         this.userDao = userDao;
     }
 
@@ -32,20 +29,18 @@ public class UserServiceInf implements UserService {
             String hashPwd= Md5Utils.switchMd5(passWord);
             User user=userDao.query(userName,hashPwd);
             //应该返回用户id，登陆成功的话应该生成token并返回
-            if (user!=null&&user.getId()!="") {
+            if (user!=null&& !"".equals(user.getId())) {
                 String uuid= UUID.randomUUID().toString();
                 token = TokenUtils.createToken(uuid, user.getRoles(),user.getId(),user.getName());
                 resultBean.setMessage(token);
                 resultBean.setStatue("1");
-                resultBean.setCode("200");
-                return resultBean;
             }
             else {
                 resultBean.setMessage(token);
                 resultBean.setStatue("0");
-                resultBean.setCode("200");
-                return resultBean;
             }
+            resultBean.setCode("200");
+            return resultBean;
         } catch (NoSuchAlgorithmException e) {
             resultBean.setMessage(token);
             resultBean.setStatue("0");

@@ -22,7 +22,7 @@ import java.util.HashMap;
  */
 @Controller
 public class FileAction {
-    private final static String fileUploadPath="D:\\IDEA\\work\\BlogManager\\src\\main\\resources\\public\\articles\\";
+    private final static String fileUploadPath="public/articles/";
     @RequestMapping("/uploadImg")
     @ResponseBody
     public HashMap<String, Object> uploadImg(@RequestParam("editormd-image-file") MultipartFile file) throws JSONException {
@@ -68,14 +68,22 @@ public class FileAction {
             String prefix=fileName.split("\\.")[0];
             String suffix=fileName.split("\\.")[1];
             try {
+                if(suffix.equals("md")){
                 byte[] bytes = file.getBytes();
                 String content=new String(bytes,"UTF-8");
                 WordToHtml wordToHtml=new WordToHtml();
                 wordToHtml.parseMd2Html(content,prefix);
-                res.put("url", "/articles/"+fileName);
+                res.put("url", "articles/"+fileName);
                 res.put("success", 1);
                 res.put("message", "upload success!");
                 return res;
+                }
+                else{
+                    res.put("url", "");
+                    res.put("success", 0);
+                    res.put("message", "upload fail!");
+                    return res;
+                }
             }
             catch (Exception e){
                 e.printStackTrace();

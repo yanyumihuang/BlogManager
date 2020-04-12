@@ -17,10 +17,10 @@ import java.util.List;
  *
  */
 @Service
-public class ArticlesCategoryServiceInf implements ArticlesCategoryService {
+public class ArticlesCategoryServiceImpl implements ArticlesCategoryService {
     private ArticlesCategoryDao articlesCategoryDao;
     private ArticlesDao articlesDao;
-    public ArticlesCategoryServiceInf(ArticlesCategoryDao articlesCategoryDao, ArticlesDao articlesDao) {
+    public ArticlesCategoryServiceImpl(ArticlesCategoryDao articlesCategoryDao, ArticlesDao articlesDao) {
         this.articlesCategoryDao = articlesCategoryDao;
         this.articlesDao = articlesDao;
     }
