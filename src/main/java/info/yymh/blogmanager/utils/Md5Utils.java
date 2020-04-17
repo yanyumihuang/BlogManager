@@ -12,8 +12,13 @@ import java.security.NoSuchAlgorithmException;
  * @Description 对密码进行加密
  */
 public class Md5Utils {
-    public static String switchMd5(String key) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest=MessageDigest.getInstance("MD5");
+    public static String switchMd5(String key) {
+        MessageDigest messageDigest= null;
+        try {
+            messageDigest = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         messageDigest.update(key.getBytes());
         byte[] digest=messageDigest.digest();
         String myhash= DatatypeConverter.printHexBinary(digest).toUpperCase();

@@ -4,11 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ *  规定返回结果的值
  * @author sikunliang
- * @Package info.yymh.blogmanager.utils
- * @ClassName:
  * @date 2020/3/20
- * @Description 规定返回结果的值
  */
 public class ResultBean {
     /**
@@ -69,9 +67,7 @@ public class ResultBean {
         this.message = message;
     }
 
-    public List<HashMap<String, String>> getResultLists() {
-        return resultLists;
-    }
+
 
     public void setResultLists(List<HashMap<String, String>> resultLists) {
         this.resultLists = resultLists;
@@ -83,5 +79,9 @@ public class ResultBean {
 
     public void setStatue(String statue) {
         this.statue = statue;
+    }
+
+    public List<HashMap<String, String>> getResultLists() {
+        return resultLists;
     }
 }

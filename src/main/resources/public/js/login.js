@@ -3,16 +3,7 @@
  * @date 2020/4/4
  * @Description
  */
-let token="";
-let id="";
-$(document).ready(function () {
- token= window.localStorage.getItem("token");
- id = window.localStorage.getItem("id");
-if (token==""||token==null){
-    createToken();
-    token = window.localStorage.getItem("token");
-}
-});
+
 function login() {
     let userName=$("#userName").val();
     let password=$("#passWord").val();
@@ -25,6 +16,7 @@ function login() {
         success: function (data) {
             if (data.code=="200"&&data.statue=="1"){
                 window.localStorage.setItem("token", data.message);
+                token=data.message;
                 window.location.href='/html/manager.html'
             }
             else {
@@ -32,11 +24,4 @@ function login() {
             }
         }
     });
-}
-function  createToken() {
-    $.get("/generictoken",
-        {'id': id},
-        function (data) {
-            window.localStorage.setItem("token", data)
-        })
 }

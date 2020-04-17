@@ -4,11 +4,14 @@
     <select id="query" parameterType="String"  resultType="info.yymh.blogmanager.pojo.User">
         select * from user a  where a.name=#{userName} AND a.pwd=#{pwd}
     </select>
+    <select id="queryByEmail" parameterType="String"  resultType="info.yymh.blogmanager.pojo.User">
+        select * from user a  where a.email=#{email} AND a.pwd=#{pwd}
+    </select>
     <insert id="insert" parameterType="string" useGeneratedKeys="true" keyProperty="id">
-        insert into user (name, pwd, rege_time, roles) value (#{userName},#{pwd},sysdate(),'geneleRole')
+        insert into user (name, pwd, rege_time,email, roles) value (#{userName},#{pwd},sysdate(),#{email},'geneleRole')
     </insert>
-    <select id="queryPre" resultType="hashmap" >
-        SELECT pemissionValue FROM pemission WHERE id IN
+    <select id="queryPre"  resultType="hashmap" >
+        SELECT * FROM pemission WHERE id IN
         <foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
             #{id}
         </foreach>

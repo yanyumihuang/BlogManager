@@ -3,7 +3,7 @@ package info.yymh.blogmanager.service;
 import info.yymh.blogmanager.utils.ResultBean;
 
 public interface ArticlesCategoryService {
-    ResultBean queryCategory();
+    ResultBean queryCategory(String pageNum,String limit);
 
     /**
      * 更新文章分类

@@ -1,4 +1,4 @@
-package com.sample;
+package info.yymh.blogmanager.pojo;
 
 
 public class Articlescategory {

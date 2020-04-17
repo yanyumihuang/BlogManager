@@ -12,21 +12,15 @@ layui.use(['upload','form','jquery','element','layer','layedit','laydate'],funct
         let upload=layui.upload;
         $=layui.jquery;
     $(document).ready(function () {
-        token = window.localStorage.getItem("token");
-        id = window.localStorage.getItem("id");
-        if (token == "" || token == null) {
-            createToken();
-            token = window.localStorage.getItem("token");
-        }
-                categoryQuerys();
-                $("select[name='category']").append(option);
+        categoryQuerys();
+        $("select[name='category']").append(option);
         form.render("select");
         addArt=$("#addArticles").html();
         $("#fileUp").show();
         $("#fileEdit").hide();
-        $.ajaxSetup({
+        /*$.ajaxSetup({
             header:{'token':token}
-        });
+        });*/
         });
     laydate.render({
         elem: '#createDate'
@@ -74,7 +68,7 @@ layui.use(['upload','form','jquery','element','layer','layedit','laydate'],funct
             obj.preview(function (index,file,result) {
                 $("#fileName").html(file.name);
                 if ($("#title").val()==""){
-                    $("#title").val(file.name)
+                    $("#title").val(file.name.split(".")[0])
                 }
             })
 
@@ -117,6 +111,11 @@ layui.use(['upload','form','jquery','element','layer','layedit','laydate'],funct
                     } else {
                         layer.msg('出了点小问题，请稍后再试', {icon: 5});
                     }
+                },
+                error:function (statue) {
+                    if (statue.status===700) {
+                        window.location.href = '/html/noAccess.html'
+                    }
                 }});
         return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
     });
@@ -145,12 +144,18 @@ layui.use(['upload','form','jquery','element','layer','layedit','laydate'],funct
                                 'token':token
                             },
                             success:function (data) {
-                                if (data.success== '1') {
+                                if (data.success == '1') {
                                     layer.msg('保存成功', {icon: 1});
                                     $("#address").val(data.url);
+                                    if ($("#title").val()== ""){
+                                        $("#title").val(data.title)
+                                         }
                                 } else {
                                     layer.msg('出了点小问题，请稍后再试', {icon: 5});
                                 }
+                            },
+                            error:function () {
+
                             }});
                     layer.closeAll();
                 },
@@ -204,6 +209,8 @@ layui.use(['upload','form','jquery','element','layer','layedit','laydate'],funct
     });
 });
 function addArticles() {
+    $("#fileUp").show();
+    $("#fileEdit").hide();
     layui.use(['table','jquery','form','element'],function () {
         let table=layui.table;
         let form=layui.form;

@@ -16,4 +16,5 @@ public interface UserService {
      * @return info.yymh.blogmanager.utils.ResultBean
      */
     ResultBean query(String userName, String passWord, String token);
+    ResultBean regeist(String userName, String passWord,String email,String token);
 }

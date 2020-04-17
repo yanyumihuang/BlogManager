@@ -1,5 +1,6 @@
 package info.yymh.blogmanager.controller;
 
+import info.yymh.blogmanager.annotation.ControllerLog;
 import info.yymh.blogmanager.utils.WordToHtml;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,9 +24,10 @@ import java.util.HashMap;
  */
 @Controller
 public class FileAction {
-    private final static String fileUploadPath="public/articles/";
+    private final static String fileUploadPath="/src/main/resources/public/articles/";
     @RequestMapping("/uploadImg")
     @ResponseBody
+    @ControllerLog("上传图片")
     public HashMap<String, Object> uploadImg(@RequestParam("editormd-image-file") MultipartFile file) throws JSONException {
         HashMap<String ,Object> res = new HashMap<>();
         if (file.isEmpty()){
@@ -55,6 +58,7 @@ public class FileAction {
     }
     @RequestMapping("/uploadArt")
     @ResponseBody
+    @ControllerLog("上传md文档")
     public HashMap<String, Object> uploadArt(@RequestParam("file") MultipartFile file) throws JSONException {
         HashMap<String ,Object> res = new HashMap<>();
         if (file.isEmpty()){
@@ -96,6 +100,7 @@ public class FileAction {
     }
     @RequestMapping("/uploadMd")
     @ResponseBody
+    @ControllerLog("新增md文档")
     public HashMap<String, Object> uploadMd(String content) throws JSONException {
         HashMap<String ,Object> res = new HashMap<>();
         if (content.isEmpty()){
@@ -107,9 +112,12 @@ public class FileAction {
             String fileName=String.valueOf(System.currentTimeMillis());
             try {
                 byte[] bytes = content.getBytes();
-                Path path = Paths.get(fileUploadPath + fileName+".md");
+                File pat=new File("");
+                String pa=pat.getCanonicalPath();
+                Path path = Paths.get(pa+fileUploadPath + fileName+".html");
                 Files.write(path, bytes);
-                res.put("url", fileName+".md");
+                res.put("url", "articles/"+fileName+".html");
+                res.put("title", fileName);
                 res.put("success", 1);
                 res.put("message", "upload success!");
                 return res;

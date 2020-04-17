@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.yymh.blogmanager.dao.LogDao">
+<insert id="insertLog" parameterType="string">
+    insert into log (userName, ip,time, action,methodName, params) value
+    (#{name},#{ip},sysdate(),#{operationalName},#{methadName},#{parameter})
+</insert>
+    <select id="queryLog" resultType="hashmap">
+        select concat(id) id, ip, userName, params, action, methodName, time from log
+    </select>
+</mapper>

@@ -3,16 +3,17 @@
  */
 var $body = $(".a");
 class SimplePagination {
-  constructor (totalPageCount) {
-    if (!totalPageCount) return
+  constructor (totalPageCount,pageType) {
+    if (!totalPageCount) return;
     this.state = {
       pageNumber:1,
-      totalPageCount
-    }
+      totalPageCount,
+        pageType
+  }
   }
 
   init (paramsObj) {
-    let state = this.state
+    let state = this.state;
     // 页面元素的外部容器
     state.container = paramsObj.container || 'body'
     // 不包括开头和结尾的两个固定按钮外，中间最多展示几个数字页码按钮
@@ -44,9 +45,9 @@ class SimplePagination {
 
     switchPage () {
 
-        let state = this.state
+        let state = this.state;
         let pCNameList = this.selectorEle('.' + state.pCName, true)
-        let pageNumber
+        let pageNumber;
         pCNameList.forEach(item => {
             item.addEventListener(state.swEvent, e => {
                 const currentPageEle = e.target
@@ -54,29 +55,53 @@ class SimplePagination {
         let dataNumberAttr = currentPageEle.getAttribute(state.dataNumberAttr)
         if (dataNumberAttr) {
             // 点击 数字 按钮
-            pageNumber = +dataNumberAttr
+            pageNumber = +dataNumberAttr;
+            if (state.pageType===0) {
+                dataLoad(pageNumber);
+            }
+            else {
+                loadCommetns(pageNumber);
+            }
         } else if (this.hasClass(currentPageEle, state.prevCName)) {
             // 点击 上一页 按钮
-            state.pageNumber > 1 && (pageNumber = state.pageNumber - 1)
+            if (state.pageNumber > 1 && (pageNumber = state.pageNumber - 1)){
+                if (state.pageType===0) {
+                    dataLoad(pageNumber);
+                }
+                else {
+                    loadCommetns(pageNumber);
+                }
+            }
+            else{
+                console.log(false)
+            }
+
+
         } else if (this.hasClass(currentPageEle, state.nextCName)) {
             // 点击 下一页 按钮
-            state.pageNumber < state.totalPageCount && (pageNumber = state.pageNumber + 1)
-        }
-        pageNumber && this.gotoPage(pageNumber)
-        var form = document.getElementById('test_form');
-        $("#pageNumber").val(pageNumber);
-        form.submit();
+            if (state.pageNumber < state.totalPageCount && (pageNumber = state.pageNumber + 1)){
+                if (state.pageType===0) {
+                    dataLoad(pageNumber);
+                }
+                else {
+                    loadCommetns(pageNumber);
+                }
+            }
+            else{
 
+            }
+        }
+        pageNumber && this.gotoPage(pageNumber);
     });
     })
     }
 
 
   gotoPage (pageNumber) {
-    let state = this.state
+    let state = this.state;
     let evaNumberLi = this.selectorEle('.' + state.pageNumberCName, true)
-    let len = evaNumberLi.length
-    if (!len || this.isIllegal(pageNumber)) return
+    let len = evaNumberLi.length;
+    if (!len || this.isIllegal(pageNumber)) return;
     // 清除 active 样式
     this.removeClass(this.selectorEle(`.${state.pCName}.${state.activeCName}`), state.activeCName)
     if (state.activePosition) {
@@ -120,16 +145,16 @@ class SimplePagination {
       // 不需要省略符号占位
       this.addClass(evaNumberLi[pageNumber - 1], state.activeCName)
     }
-    state.pageNumber = pageNumber
-    state.onPageChange && state.onPageChange(state)
-    // 判断 上一页 下一页 是否可使用
-    this.switchPrevNextAble()
+      state.pageNumber = pageNumber;
+      state.onPageChange && state.onPageChange(state);
+      // 判断 上一页 下一页 是否可使用
+      this.switchPrevNextAble()
   }
 
   switchPrevNextAble () {
-    let state = this.state
-    let prevBtn = this.selectorEle('.' + state.prevCName)
-    let nextBtn = this.selectorEle('.' + state.nextCName)
+    let state = this.state;
+    let prevBtn = this.selectorEle('.' + state.prevCName);
+    let nextBtn = this.selectorEle('.' + state.nextCName);
     // 当前页已经是第一页，则禁止 上一页 按钮的可用性
     state.pageNumber > 1
       ? (this.hasClass(prevBtn, state.disbalePrevCName) && this.removeClass(prevBtn, state.disbalePrevCName))
@@ -203,4 +228,8 @@ class SimplePagination {
         eleObj.classList.remove(className);
     }
   }
+}
+function load(pageNumber) {
+
+
 }

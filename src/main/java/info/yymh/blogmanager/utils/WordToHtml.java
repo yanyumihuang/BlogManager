@@ -88,7 +88,7 @@ public class WordToHtml {
         FileUtils.writeStringToFile(new File(path, "interface.html"), content,
                 "utf-8");
     }
-    public  void  parseMd2Html(String content,String prefix){
+    public  void  parseMd2Html(String content,String prefix) throws IOException {
    /*     String aa="";
         FileInputStream fileInputStream=null;
         try {
@@ -150,7 +150,10 @@ public class WordToHtml {
         HtmlRenderer renderer =
                 HtmlRenderer.builder().extensions(extensions).attributeProviderFactory(context -> new HtmlAttributeProvider()).build();
         String html=renderer.render(document);
-        String fileName="D:\\IDEA\\work\\BlogManager\\src\\main\\resources\\public\\articles"+prefix+".html";
+        //File path = new File(ResourceUtils.getURL("classpath:").getPath());
+        File path=new File("");
+        String pa=path.getCanonicalPath();
+        String fileName=pa+"/src/main/resources/public/articles/"+prefix+".html";
         try {
             BufferedWriter  writer = new BufferedWriter(new FileWriter(fileName));
             writer.write(html);

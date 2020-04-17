@@ -17,26 +17,26 @@ import java.util.Map;
 
 /**
  * @author sikunliang
- * @Package info.yymh.blogmanager.utils
- * @ClassName:
  * @date 2020/3/23
- * @Description 创建token，并对token进行校验
  */
 @Component
 public class TokenUtils {
-    private static Long ttlMillis;
-    private static String stringKey;
+    private ConfigBean configBean;
 
-    public static String createToken(String id,String rolePemission,String userId,String userName){
-       String key=generalKey();
+    public TokenUtils(ConfigBean configBean) {
+        this.configBean = configBean;
+    }
+
+    public  String createToken(String id,String role,String userId,String userName){
+        String key=generalKey();
         Algorithm algorithmHS = Algorithm.HMAC256(key);
         long nowMillis=System.currentTimeMillis();
         Date now=new Date(nowMillis);
         Map<String ,Object> claim=new HashMap<>(3);
-        claim.put("uuid",userId);
+        claim.put("id",userId);
         claim.put("name",userName);
-        claim.put("role",rolePemission);
-        long expMillis=nowMillis+172800000;
+        claim.put("role",role);
+        long expMillis=nowMillis+configBean.getTtlMillis();
         Date expDate=new Date(expMillis);
         String token= JWT.create()
                 .withClaim("info",claim)
@@ -46,7 +46,7 @@ public class TokenUtils {
         return  token;
     }
     //校验通过后应该刷新过期时间
-    public static boolean verifyJWT(String token) throws Exception{
+    public  boolean verifyJWT(String token) throws Exception{
         try {
             String key=generalKey();
             Algorithm algorithm = Algorithm.HMAC256(key);
@@ -62,32 +62,22 @@ public class TokenUtils {
                 Date expDate = jwt.getExpiresAt();
                 Date createDate = jwt.getIssuedAt();
                 Date now = new Date();
-                if (createDate.before(now) && now.before(expDate)) {
-                   return true;
-                }
-                return false;
+                return createDate.before(now) && now.before(expDate);
             }
         } catch (JWTVerificationException exception) {
             return false;
         }
     }
-    public static Map<String, Object>  decodedJWT(String token){
+    public  Map<String, Object>  decodedJWT(String token){
         DecodedJWT jwt = JWT.decode(token);
         Claim claim=jwt.getClaim("info");
         return claim.asMap();
 
     }
-    public static  String generalKey(){
-        byte[] encodedKey = Base64.decodeBase64("c2tuZm9hbm5m");
+    public   String generalKey(){
+        byte[] encodedKey = Base64.decodeBase64(configBean.getKey());
         SecretKey key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
         return key.toString();
     }
 
-    public static void setTtlMillis(Long ttlMillis) {
-        TokenUtils.ttlMillis = ttlMillis;
-    }
-
-    public static void setStringKey(String stringKey) {
-        TokenUtils.stringKey = stringKey;
-    }
 }

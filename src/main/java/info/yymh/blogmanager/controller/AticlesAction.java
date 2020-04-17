@@ -1,5 +1,6 @@
 package info.yymh.blogmanager.controller;
 
+import info.yymh.blogmanager.annotation.ControllerLog;
 import info.yymh.blogmanager.pojo.Articles;
 import info.yymh.blogmanager.service.ArticlesService;
 import info.yymh.blogmanager.utils.ResultBean;
@@ -26,6 +27,7 @@ public class AticlesAction {
 
     @RequestMapping("/queryArticles")
     @ResponseBody
+    @ControllerLog("查询文章摘要")
     public ResultBean query(HttpServletRequest request, String pageNum){
         String token=request.getHeader("token");
         ResultBean articlesLists=articlesService.queryArticles(pageNum,token);
@@ -33,12 +35,14 @@ public class AticlesAction {
     }
     @RequestMapping("/updateArticles")
     @ResponseBody
+    @ControllerLog("更新文章摘要")
     public ResultBean update(Articles articles){
         ResultBean resultBean=articlesService.updateArticles(articles);
         return  resultBean;
     }
     @RequestMapping("/insertArticles")
     @ResponseBody
+    @ControllerLog("新增文章摘要")
     public ResultBean insert(Articles articles){
         ResultBean resultBean=articlesService.insertArticles(articles);
         return  resultBean;

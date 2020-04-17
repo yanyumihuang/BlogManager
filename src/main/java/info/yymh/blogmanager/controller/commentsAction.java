@@ -1,5 +1,7 @@
 package info.yymh.blogmanager.controller;
 
+import info.yymh.blogmanager.annotation.ControllerLog;
+import info.yymh.blogmanager.pojo.Comments;
 import info.yymh.blogmanager.service.CommentsService;
 import info.yymh.blogmanager.utils.ResultBean;
 import org.springframework.stereotype.Controller;
@@ -24,21 +26,26 @@ public class commentsAction {
     }
     @RequestMapping("/queryComments")
     @ResponseBody
-    public ResultBean queryComments(){
-        ResultBean resultBean=commentsService.queryComments();
+    @ControllerLog("查询文章留言")
+    public ResultBean queryComments(String id,String pageNum,String limit){
+        ResultBean resultBean=commentsService.queryComments(id,pageNum,limit);
         return  resultBean;
     }
 
     @RequestMapping("/postComments")
     @ResponseBody
-    public ResultBean postComments(String userName, String passWord, String comments, HttpServletRequest request){
+    @ControllerLog("新增文章留言")
+    public ResultBean postComments(Comments comments, HttpServletRequest request){
         String token=request.getHeader("token");
-        ResultBean resultBean=commentsService.postCommetns(userName,passWord,comments,token);
+        String ip=request.getRemoteAddr();
+        comments.setIp(ip);
+        ResultBean resultBean=commentsService.postCommetns(comments,token);
         return resultBean;
     }
 
     @RequestMapping("/deleteComments")
     @ResponseBody
+    @ControllerLog("删除文章留言")
     public ResultBean deleteComments(String id){
         ResultBean resultBean=commentsService.deleteComments(id);
         return resultBean;

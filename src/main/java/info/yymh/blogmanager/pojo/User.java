@@ -7,6 +7,7 @@ public class User {
   private String pwd;
   private String regeTime;
   private String roles;
+  private String email;
 
 
   public String getId() {
@@ -53,4 +54,11 @@ public class User {
     this.roles = roles;
   }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

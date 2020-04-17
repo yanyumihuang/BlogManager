@@ -21,8 +21,9 @@ public class TokenAction {
     }
     @RequestMapping("/generictoken")
     @ResponseBody
-    public String  genericToken(String id){
-       String token= tokenService.genericToken(id);
+    public String  genericToken(){
+       String token= tokenService.genericToken();
+
         return token;
     }
 }

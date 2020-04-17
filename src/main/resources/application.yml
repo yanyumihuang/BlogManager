@@ -1,3 +1,5 @@
+server:
+  port: 8081
 spring:
   servlet:
     multipart:
@@ -24,6 +26,13 @@ spring:
     testWhileIdle: true
     testOnBorrow: true
     testOnReturn: false
+#    filter:
+#      slf4j:
+#        enabled: true
+#        statement-create-after-log-enabled: false
+#        statement-close-after-log-enabled: false
+#        result-set-open-after-log-enabled: false
+#        result-set-close-after-log-enabled: false
     filters: wall,stat,slf4j
 logging:
   level:
@@ -32,8 +41,10 @@ logging:
         Statement: DEBUG
   file:
     name: blogmanager.log
+    max-size: 10MB
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
+  call-setters-on-nulls: true
 pagehelper:
   helper-dialect: mysql
   reasonable: true

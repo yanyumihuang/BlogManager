@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="5;url=login.html" />
+    <title>无权限</title>
+</head>
+<body>
+<div class="container">
+    <!-- BEGIN MAIN CONTENT -->
+    <section class="error-wrapper">
+        <h3>你没有当前页面的权限，倒计时结束后将跳转到登陆界面</h3>
+        <p class="page-404">
+            <span>页面自动</span>
+            <a href="login.html">直接跳转</a>
+            <span id="show"></span>
+        </p>
+    </section>
+    <!-- END MAIN CONTENT -->
+</div>
+<script type="text/javascript">
+    var t = 5;//设定跳转的时间
+    setInterval("refer()", 1000); //启动1秒定时
+    function refer() {
+        if (t == 0){
+            location = "http://www.feiniaomy.com"; //跳转的地址
+        }
+        document.getElementById('show').innerHTML = "" + t + "秒后跳转到登陆页面"; // 显示倒计时
+        t--; // 计数器递减
+    }
+</script>
+
+</body>
+</html>

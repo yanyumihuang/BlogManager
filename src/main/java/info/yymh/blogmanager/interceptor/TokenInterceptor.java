@@ -14,13 +14,17 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 /**
+ * 拦截所有请求进行token的判断
  * @author sikunliang
- * @Package info.yymh.blogmanager.interceptor
- * @ClassName:
  * @date 2020/3/23
- * @Description 拦截所有请求进行token的判断
  */
 public class TokenInterceptor implements HandlerInterceptor {
+    private TokenUtils tokenUtils;
+
+    public TokenInterceptor(TokenUtils tokenUtils) {
+        this.tokenUtils = tokenUtils;
+    }
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //如果访问的是管理页面那么校验失败的话应该重定向到登陆页面，这个等登陆页面写好再完善
@@ -28,12 +32,11 @@ public class TokenInterceptor implements HandlerInterceptor {
         logger.info("进入token校验连接器");
         String token=request.getHeader("token");
         logger.info("开始进行校验");
-
         ResultBean resultBean = new ResultBean();
-        if (token.isEmpty()){
+        if (token==null||token.isEmpty()){
             resultBean.setCode("200");
             resultBean.setStatue("0");
-            resultBean.setMessage("token校验不通过");
+            resultBean.setMessage("token error");
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(resultBean);
             PrintWriter pw = response.getWriter();
@@ -44,15 +47,15 @@ public class TokenInterceptor implements HandlerInterceptor {
             return false;
         }
         else {
-            Map<String,Object> map=TokenUtils.decodedJWT(token);
-            if (map.get("role")==""||TokenUtils.verifyJWT(token)){
+            Map<String,Object> map=tokenUtils.decodedJWT(token);
+            if (map.get("role")==""||tokenUtils.verifyJWT(token)){
                 logger.info("token校验完成");
                 return true;
             }
             else {
                 resultBean.setCode("200");
                 resultBean.setStatue("0");
-                resultBean.setMessage("token校验不通过");
+                resultBean.setMessage("token error");
                 ObjectMapper mapper = new ObjectMapper();
                 String json = mapper.writeValueAsString(resultBean);
                 PrintWriter pw = response.getWriter();

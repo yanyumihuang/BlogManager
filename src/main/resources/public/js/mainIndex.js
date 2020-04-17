@@ -3,20 +3,10 @@
  * @date 2020/3/17
  * @Description 监听滚动操作，从而展示不同的导航条
  */
-let token = window.localStorage.getItem("token");
-let id = window.localStorage.getItem("id");
+let num="";
 $(document).ready(function () {
-    if (token==null||token==="") {
-        createToken();
-    }
-    dataLoad();
-
-    const slp = new SimplePagination(1);
-    slp.init({
-        container: '.box',
-        maxShowBtnCount: 3
-    });
-    slp.gotoPage(1)
+    dataLoad(1);
+    initPage(num)
 });
 $(window).scroll(function () {
     let scrollTop = $(document).scrollTop();
@@ -28,23 +18,20 @@ $(window).scroll(function () {
     }
 });
 
-function dataLoad() {
+function dataLoad(pageNumb) {
     let post_list = $(".post-list");
     $.ajax("/queryArticles", {
             type: "get",
-            data: {'pageNum': 1},
+            data: {'pageNum': pageNumb},
+            async:false,
             headers: {
                 'token': token
             },
             success: function (data) {
-                if (data.code === 400) {
-                    createToken();
-                    dataLoad();
-                } else {
+                if (data.code === "200"&&data.statue==="1") {
                     if (data.rows !== 0) {
                         let result = data.resultLists;
                         let ininnerHtmlString = "";
-                        console.log("标题" + result[0].TITLE)
                         for (var i = 0; i < data.rows; i++) {
                             ininnerHtmlString +=
                                 "<div class='post-wrapper'>" +
@@ -52,17 +39,13 @@ function dataLoad() {
                                 "  <section class=\"meta\">\n" +
                                 "    <div class=\"meta\" id=\"header-meta\">\n" +
                                 "  <h2 class=\"title\">\n" +
-                                "    <a href=\"/html/articlesWelcome_to_use_CSDN-markdown_Editor_new.html\">\n" +
-
+                                "    <a href=\"/html/detail.html?id="+ result[i].ID+"&address="+result[i].ADDRESS+"\">\n" +
                                 result[i].TITLE +
                                 "    </a>\n" +
                                 "  </h2>\n" +
                                 "      <div class=\"new-meta-box\">\n" +
                                 "<div class=\"new-meta-item author\">\n" +
-                                "    <img src=\"https://www.bfdz.ink/favicon.ico\">\n" +
-                                "    <p>" +
-                                result[i].AUTHOR + "</p>\n" +
-                                "  </a>\n" +
+                                "    <p STYLE='margin-bottom: 0px'>" + result[i].AUTHOR + "</p>\n" +
                                 "</div>\n" +
                                 "  <div class=\"new-meta-item category\">\n" +
                                 "    <a href=\"/categories/%E5%AE%9E%E7%94%A8%E7%BD%91%E7%AB%99/\" rel=\"nofollow\">\n" +
@@ -85,13 +68,9 @@ function dataLoad() {
                                 "  <section class=\"article typo\">\n" +
                                 "    <div class=\"article-entry\" itemprop=\"articleBody\">\n" +
                                 "      <p>" + result[i].INTRODUCTION + "</p>\n" +
-                                "<p>coding:</p>\n" +
-                                "<blockquote>\n" +
-                                "<p>" + result[i].INTRODUCTION + "</p>\n" +
-                                "</blockquote>\n" +
                                 "          <div class=\"button readmore\">\n" +
-                                "            <a href=\"/2020/03/15/146/\">\n" +
-                                "              阅读全文 <i class=\"fas fa-chevron-right\"></i>\n" +
+                                "          <a href=\"/html/detail.html?id="+ result[i].ID+"&address="+result[i].ADDRESS+"\">\n"+
+                                "         阅读全文 <i class=\"fas fa-chevron-right\"></i>\n" +
                                 "            </a>\n" +
                                 "          </div>\n" +
                                 "    </div>\n" +
@@ -99,21 +78,22 @@ function dataLoad() {
                                 "</article>" +
                                 "</div>"
                         }
-                        post_list.html(ininnerHtmlString)
+                        post_list.html(ininnerHtmlString);
+                        num=data.count;
                     }
-
+                } else {
+                    alert("加载出错请稍后再试")
                 }
             }
         }
     )
-}
-function  createToken() {
 
-    $.ajax("/generictoken",{
-        data:{'id': id},
-        async :false,
-        success:function (data) {
-            window.localStorage.setItem("token", data)
-            token=data;
-        }})
+}
+function initPage(num) {
+    slp = new SimplePagination(Math.ceil(parseInt(num)/5),0);
+    slp.init({
+        container: '.box',
+        maxShowBtnCount: 3
+    });
+    slp.gotoPage(1);
 }

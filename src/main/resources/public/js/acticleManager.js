@@ -8,8 +8,6 @@ let switchFlag=false;
 let  option="";
 let flag=false;
 let resultda;
-let token="";
-let id="";
 let addArt="";
 let articlesId="";
 /*layui.use(['element'],function () {
@@ -31,8 +29,18 @@ function categoryQuerys() {
         },
         success:function (data) {
              result=data.resultLists;
-            for (let i=0;i<result.length;i++){
-                option+='<option value='+result[i].id+'>'+result[i].category+'</option>'
+             if (result.length!=0) {
+                 for (let i = 0; i < result.length; i++) {
+                     option += '<option value=' + result[i].id + '>' + result[i].category + '</option>'
+                 }
+             }
+             else {
+                 option='<option value="">请先增加分类再进行选择</option>'
+             }
+        },
+        error:function (statue) {
+            if (statue.status===700) {
+                window.location.href = '/html/noAccess.html'
             }
         }
     });
@@ -158,7 +166,14 @@ function articleQuery() {
                         } else {
                             layer.msg('出了点小问题，请稍后再试', {icon: 5});
                         }
-                    }})
+                    },
+                     error:function (statue) {
+            if (statue.status===700) {
+                window.location.href = '/html/noAccess.html'
+            }
+        }
+
+                    })
             });
             //下拉框改变的监听
             form.on('select(Category)', function (obj) {
@@ -177,7 +192,12 @@ function articleQuery() {
                             } else {
                                 layer.msg('出了点小问题，请稍后再试', {icon: 5});
                             }
-                        }})
+                        },
+                         error:function (statue) {
+            if (statue.status===700) {
+                window.location.href = '/html/lognoAccess.html'
+            }
+        }})
             });
             //自定义事件的监听
             table.on('tool(articlesList)', function (obj) {
@@ -219,7 +239,13 @@ function articleQuery() {
                                         switchFlag = false
                                     }
                                 }
-                            }})
+                            },
+                                 error:function (statue) {
+            if (statue.status===700) {
+                window.location.href = '/html/lonoAccess.html'
+            }
+        }
+                            })
 
                     },
                         function () {
@@ -245,10 +271,11 @@ function articleQuery() {
 
 //评论页面
 function commentsQuery() {
-    layui.use(['table','jquery','form','element'],function () {
+    layui.use(['table','jquery','form','element','util'],function () {
         let table=layui.table;
         let form=layui.form;
         let element=layui.element;
+        let util=layui.util;
         $=layui.jquery;
         //加载tab标签页
         if($("li[lay-id='2']").length==0) {
@@ -279,9 +306,15 @@ function commentsQuery() {
                     [
                         {field: 'id', title: "id", hide: true},
                         {field: 'article', title: "评论文章", width: 300, align: 'center'},
-                        {field: 'userName', title: "用户", width: 300, align: 'center'},
-                        {field: 'comments', title: "评论内容", width: 150, align: 'center'},
-                        {field: '', title: "评论时间", width: 120, align: 'center'},
+                        {field: 'userName', title: "用户", width: 100, align: 'center'},
+                        {field: 'comments', title: "评论内容", width: 300, align: 'center',templet: function(d){
+                                return util.escape(d.comments);
+                            }},
+                        {field: 'replyName', title: "回复用户", width: 100, align: 'center'},
+                        {field: 'browserType', title: "浏览器类型", width: 150, align: 'center'},
+                        {field: 'devicesType', title: "设备类型", width: 150, align: 'center'},
+                        {field: 'ip', title: "访问ip", width: 150, align: 'center'},
+                        {field: 'commentsDate', title: "评论时间", width: 120, align: 'center'},
                         {fixed: 'right', title: '操作', toolbar: '#barTool', width: 150}
                     ]
                 ],
@@ -306,7 +339,13 @@ function commentsQuery() {
                                 } else {
                                     layer.msg('出了点小问题，请稍后再试', {icon: 5});
                                 }
-                            }});
+                            },
+                                 error:function (statue) {
+            if (statue.status===700) {
+                window.location.href = '/html/noAccess.html'
+            }
+        }
+                            });
                         layer.close(index);
                     });
                 }
@@ -391,7 +430,12 @@ function categoryQuery() {
                                             } else {
                                                 layer.msg('出了点小问题，请稍后再试', {icon: 5});
                                             }
-                                        }
+                                        },
+                                         error:function (statue) {
+            if (statue.status===700) {
+                window.location.href = '/html/noAccess.html'
+            }
+        }
                                     });
                             }
                             layer.close(index);
@@ -426,7 +470,12 @@ function categoryQuery() {
                                                 switchFlag = false;
                                             }
                                         }
-                                    }})
+                                    },
+                                     error:function (statue) {
+            if (statue.status===700) {
+                window.location.href = '/html/noAccess.html'
+            }
+        }})
 
                         },
                         function () {
@@ -469,7 +518,12 @@ function categoryQuery() {
                                             } else {
                                                 layer.msg('出了点小问题，请稍后再试', {icon: 5});
                                             }
-                                        }});
+                                        },
+                                         error:function (statue) {
+            if (statue.status===700) {
+                window.location.href = '/html/noAccess.html'
+            }
+        }});
                                 layer.close(index);
                                 table.reload('categoryLists', {
                                     page: {
@@ -492,10 +546,56 @@ function categoryQuery() {
         }
     });
 }
-function  createToken() {
-    $.get("/generictoken",
-        {'id': id},
-        function (data) {
-            window.localStorage.setItem("token", data)
-        })
+function logout() {
+    window.localStorage.setItem("token", "");
+    window.location.href='/html/login.html'
+}
+function logQuery() {
+    layui.use(['table','element'],function () {
+        let table = layui.table;
+        let element = layui.element;
+        if($("li[lay-id='5']").length==0) {
+            //加载tab标签页
+            element.tabAdd('demo', {
+                title: '日志管理'
+                , content: '<table id=\"logTable\" lay-filter=\"logList\"></table>' //支持传入html
+                , id: '5'
+            });
+            element.render('tab', 'demo');
+            // 渲染表格
+            table.render({
+                elem: "#logTable",
+                url: "/queryLog",
+                height: 500,
+                headers: {
+                    'token': token
+                },
+                request: {
+                    pageName: 'pageNum'
+                },
+                response: {
+                    statusCode: 200,
+                    msgName: 'message',
+                    dataName: 'resultLists'
+                },
+                page: true,
+                cols: [
+                    [
+                        {field: 'id', title: "id", hide: true},
+                        {field: 'userName', title: "操作用户",edit: 'text', width: 300, align: 'center',event:'signEdit'},
+                        {field: 'params', title: "参数", width: 300, align: 'center'},
+                        {field: 'action', title: "操作名称", width: 300, align: 'center'},
+                        {field: 'methodName', title: "访问方法名", width: 300, align: 'center'},
+                        {field: 'ip', title: "访问ip", width: 300, align: 'center'},
+                        {field: 'time', title: "操作时间", width: 300, align: 'center'},
+                    ]
+                ],
+                id:'logLists'
+            });
+            element.tabChange('demo', '5');
+        }
+        else {
+            element.tabChange('demo', '5');
+        }
+    });
 }
