@@ -174,5 +174,39 @@
     initPage(num);
 </script>
 <script>hljs.initHighlightingOnLoad();</script>
+<script>
+    $("#email").blur(function () {
+        let email=filterXSS($("#email").val());
+        if (email==""){
+            $("#messagerEmail").html("邮箱不能为空");
+            $("#detail-form-btn").attr("disabled", "disabled");
+        }
+        else {
+            if (!verEmail(email)) {
+                $("#messagerEmail").html("邮箱格式不正确，请重新输入");
+                $("#detail-form-btn").attr("disabled", "disabled");
+            } else {
+                $("#messagerEmail").html("");
+                $("#detail-form-btn").removeAttr("disabled")
+            }
+        }
+    });
+    $("#passWord").blur(function () {
+        let Password=filterXSS($("#passWord").val());
+        if (Password==""){
+            $("#messagerPassword").html("密码不能为空");
+            $("#detail-form-btn").attr("disabled", "disabled");
+        }
+        else {
+            if (!verPassword(Password)) {
+                $("#messagerPassword").html("密码格式不正确，请重新输入,至少八个字符，至少一个字母和一个数字");
+                $("#detail-form-btn").attr("disabled", "disabled")
+            } else {
+                $("#messagerPassword").html("");
+                $("#detail-form-btn").removeAttr("disabled")
+            }
+        }
+    });
+</script>
 </body>
 </html>

@@ -137,43 +137,13 @@ function getParams(key) {
     return null;
 }
 function verEmail(email) {
-    let  patternEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    let  patternEmail = /^[A-Za-z0-9]+([_\.][A-Za-z0-9]+)*@([A-Za-z0-9\-]+\.)+[A-Za-z]{2,6}$/;
     return patternEmail.test(email)
 }
-function verEmail(passWord) {
-   let  parentPassword=/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+function verPassword(passWord) {
+   let  parentPassword=/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return parentPassword.test(passWord)
 }
-$("#email").blur(function () {
-    let email=filterXSS($("#email").val());
-    if (email==""){
-        $("#messagerEmail").html("邮箱不能为空");
-        $("#detail-form-btn").attr("disabled", false)
-    }
-    else {
-        if (!verEmail(email)) {
-            $("#messagerEmail").html("邮箱格式不正确，请重新输入");
-            $("#detail-form-btn").attr("disabled", false)
-        } else {
-            $("#detail-form-btn").attr("disabled", true)
-        }
-    }
-});
-$("#passWord").blur(function () {
-    let email=filterXSS($("#passWord").val());
-    if (email==""){
-        $("#messagerPassword").html("密码不能为空");
-        $("#detail-form-btn").attr("disabled", false)
-    }
-    else {
-        if (!verEmail(email)) {
-            $("#messagerEmail").html("密码格式不正确，请重新输入");
-            $("#detail-form-btn").attr("disabled", false)
-        } else {
-            $("#detail-form-btn").attr("disabled", true)
-        }
-    }
-});
 function initPage(num) {
     slp = new SimplePagination(Math.ceil(parseInt(num)/5),1);
     slp.init({

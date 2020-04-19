@@ -91,8 +91,10 @@ public class SystemLogAspect {
             resultBean = (ResultBean) joinPoint.proceed();
         }
         catch (Throwable throwable){
-            throwable.printStackTrace();
             logger.warn(String.format("异常已被拦截, 异常信息为: %s", throwable));
+            if (resultBean==null){
+                resultBean=new ResultBean();
+            }
             resultBean.setCode("500");
             resultBean.setStatue("0");
             resultBean.setResultLists(null);
